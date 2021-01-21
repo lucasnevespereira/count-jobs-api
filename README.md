@@ -14,8 +14,17 @@ go run main.go
 
 Visit [localhost:3000](http://localhost:3000)
 
+## Options
+
+There are currently 4 countries handled by this API:
+
+- fr (France 🇫🇷)
+- uk (United Kingdom 🇬🇧)
+- usa (United States 🇺🇸)
+- pt (Portugal 🇵🇹)
+
 ## Example Request
 
 ```
-http://localhost:3000/api?term=Javascript&location=Paris
+http://localhost:3000/api?term=Javascript&location=Paris&country=fr
 ```
