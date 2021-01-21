@@ -7,14 +7,18 @@ import (
 	"github.com/gocolly/colly"
 )
 
-var baseURL = "https://fr.indeed.com/"
+// TODO: handle url from UK https://www.indeed.co.uk/jobs
+// TODO: handle url from Portugal https://pt.indeed.com/ofertas
+// TODO: handle url from USA https://www.indeed.com/jobs
+
+var baseURL = "https://fr.indeed.com/jobs"
 
 // StartCollector collects data needed
 func StartCollector(term string, location string) string {
 
 	var jobCount string
 
-	queryUrl := fmt.Sprintf("jobs?q=%v&l=%v&radius=0", term, location)
+	queryUrl := fmt.Sprintf("?q=%v&l=%v&radius=0", term, location)
 
 	fmt.Println("searching: ", queryUrl)
 
