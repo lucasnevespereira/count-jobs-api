@@ -14,9 +14,7 @@ go run main.go
 
 Visit [localhost:3000](http://localhost:3000)
 
-## Requests
-
-Example Request
+## Example Request
 
 ```
 http://localhost:3000/api?term=Javascript&location=Paris
