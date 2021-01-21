@@ -5,7 +5,7 @@ Sample API based on a crawler that gets the number of jobs from indeed.
 ## Usage
 
 ```
-https://github.com/lucasnevespereira/count-jobs-api
+git clone https://github.com/lucasnevespereira/count-jobs-api
 ```
 
 ```
