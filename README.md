@@ -1,3 +1,23 @@
 # count-jobs-api
 
-Sample API based on a crawler that gets the number of jobs from indeed
+Sample API based on a crawler that gets the number of jobs from indeed.
+
+## Usage
+
+```
+https://github.com/lucasnevespereira/count-jobs-api
+```
+
+```
+go run main.go
+```
+
+Visit [localhost:3000](http://localhost:3000)
+
+## Requests
+
+Example Request
+
+```
+http://localhost:3000/api?term=Javascript&location=Paris
+```
