@@ -9,10 +9,7 @@ import (
 var baseURL = "https://www.indeed.com/"
 
 // StartCollector collects data needed
-func StartCollector() {
-
-	location := "Paris"
-	term := "PHP"
+func StartCollector(term string, location string) {
 
 	queryUrl := fmt.Sprintf("jobs?q=%v&l=%v+%2875%29&radius=0", term, location)
 
