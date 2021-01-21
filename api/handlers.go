@@ -13,6 +13,7 @@ func DataHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		location := r.URL.Query().Get("location")
 		term := r.URL.Query().Get("term")
-		collector.StartCollector(term, location)
+		result := collector.StartCollector(term, location)
+		w.Write([]byte(result))
 	}
 }
