@@ -9,7 +9,7 @@ import (
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		w.Write([]byte("Hello from Golang API 👋🏼"))
+		w.Write([]byte("Hello from the Count Jobs API 👋🏼"))
 	}
 }
 
