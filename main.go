@@ -3,6 +3,7 @@ package main
 import (
 	"count-jobs/api"
 	"net/http"
+	"os"
 )
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
@@ -13,7 +14,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/api", api.DataHandler)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":"+port, nil)
 }
