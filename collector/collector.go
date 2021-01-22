@@ -1,15 +1,13 @@
 package collector
 
 import (
+	"count-jobs/models"
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/gocolly/colly"
 )
-
-// TODO: handle url from UK https://www.indeed.co.uk/jobs
-// TODO: handle url from Portugal https://pt.indeed.com/ofertas
-// TODO: handle url from USA https://www.indeed.com/jobs
 
 // StartCollector collects data needed
 func StartCollector(term string, location string, country string) string {
@@ -46,7 +44,8 @@ func StartCollector(term string, location string, country string) string {
 		e := element.Text
 		str := strings.TrimSpace(e)
 		strLen := len(str)
-		jobCount = str[9 : strLen-removeIndex]
+		count := str[9 : strLen-removeIndex]
+		jobCount = strings.TrimSpace(count)
 	})
 
 	collector.OnRequest(func(request *colly.Request) {
@@ -55,5 +54,26 @@ func StartCollector(term string, location string, country string) string {
 
 	collector.Visit(baseURL + queryUrl)
 
-	return jobCount
+	if jobCount == "" {
+		e := models.Err{
+			Message: "There is no positions for this job 🙁",
+		}
+
+		err, _ := json.Marshal(e)
+
+		return string(err)
+	}
+
+	j := models.Job{
+		Tech:     term,
+		Count:    jobCount,
+		Location: location,
+	}
+
+	job, err := json.Marshal(j)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return string(job)
 }
