@@ -12,7 +12,7 @@ git clone https://github.com/lucasnevespereira/count-jobs-api
 go run main.go
 ```
 
-Visit [localhost:3000](http://localhost:3000)
+Visit [localhost:5000](http://localhost:5000)
 
 ## Options
 
