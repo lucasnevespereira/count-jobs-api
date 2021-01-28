@@ -16,7 +16,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		port = "5000"
 	}
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/api", api.DataHandler)
