@@ -23,8 +23,16 @@ There are currently 4 countries handled by this API:
 - usa (United States 🇺🇸)
 - pt (Portugal 🇵🇹)
 
-## Example Request
+## Example Requests
+
+Local
 
 ```
-http://localhost:3000/api?term=Javascript&location=Paris&country=fr
+http://localhost:5000/api?term=Javascript&location=Paris&country=fr
+```
+
+Prod
+
+```
+https://count-jobs.herokuapp.com/api?term=Javascript&location=Paris&country=fr
 ```
