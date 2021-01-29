@@ -14,6 +14,7 @@ func StartCollector(term string, location string, country string) string {
 
 	var baseURL string
 	var removeIndex int
+	var startIndex int
 
 	countryReceiver := strings.ToLower(country)
 
@@ -21,15 +22,19 @@ func StartCollector(term string, location string, country string) string {
 	case "fr":
 		baseURL = "https://fr.indeed.com/jobs"
 		removeIndex = len("emplois")
+		startIndex = 9
 	case "uk":
 		baseURL = "https://uk.indeed.com/jobs"
 		removeIndex = len("jobs")
+		startIndex = 9
 	case "pt":
 		baseURL = "https://pt.indeed.com/ofertas"
 		removeIndex = len("ofertas")
+		startIndex = 11
 	case "usa":
 		baseURL = "https://www.indeed.com/jobs"
 		removeIndex = len("jobs")
+		startIndex = 9
 	}
 
 	var jobCount string
@@ -44,7 +49,7 @@ func StartCollector(term string, location string, country string) string {
 		e := element.Text
 		str := strings.TrimSpace(e)
 		strLen := len(str)
-		count := str[9 : strLen-removeIndex]
+		count := str[startIndex : strLen-removeIndex]
 		jobCount = strings.TrimSpace(count)
 	})
 
