@@ -56,7 +56,7 @@ func StartCollector(term string, location string, country string) string {
 
 	if jobCount == "" {
 		e := models.Err{
-			Message: "There is no positions for this job 🙁",
+			Message: "Jobs: " + jobCount + ". There is no positions for this job 🙁",
 		}
 
 		err, _ := json.Marshal(e)
