@@ -22,7 +22,7 @@ func StartCollector(term string, location string, country string) string {
 		baseURL = "https://fr.indeed.com/jobs"
 		removeIndex = len("emplois")
 	case "uk":
-		baseURL = "https://www.indeed.co.uk/jobs"
+		baseURL = "https://uk.indeed.com/jobs"
 		removeIndex = len("jobs")
 	case "pt":
 		baseURL = "https://pt.indeed.com/ofertas"
