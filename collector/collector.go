@@ -34,7 +34,7 @@ func StartCollector(term string, location string, country string) string {
 
 	var jobCount string
 
-	queryUrl := fmt.Sprintf("?q=%v&l=%v&radius=0", term, location)
+	queryURL := fmt.Sprintf("?q=%v&l=%v&radius=0", term, location)
 
 	collector := colly.NewCollector(
 		colly.AllowedDomains("www.indeed.com", "indeed.com", "fr.indeed.com", "pt.indeed.com", "www.indeed.co.uk", "indeed.co.uk"),
@@ -52,11 +52,11 @@ func StartCollector(term string, location string, country string) string {
 		fmt.Println("Visiting : ", request.URL.String())
 	})
 
-	collector.Visit(baseURL + queryUrl)
+	collector.Visit(baseURL + queryURL)
 
 	if jobCount == "" {
 		e := models.Err{
-			Message: "Jobs: " + jobCount + ". There is no positions for this job 🙁",
+			Message: "There is no positions for this job 🙁",
 		}
 
 		err, _ := json.Marshal(e)
