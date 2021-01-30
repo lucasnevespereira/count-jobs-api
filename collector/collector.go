@@ -42,7 +42,7 @@ func StartCollector(term string, location string, country string) string {
 	queryURL := fmt.Sprintf("?q=%v&l=%v&radius=0", term, location)
 
 	collector := colly.NewCollector(
-		colly.AllowedDomains("www.indeed.com", "indeed.com", "fr.indeed.com", "https://fr.indeed.com", "pt.indeed.com", "https://pt.indeed.com", "https://uk.indeed.com", "uk.indeed.com", "www.indeed.co.uk", "indeed.co.uk"),
+		colly.AllowedDomains("fr.indeed.com", "https://fr.indeed.com", "pt.indeed.com", "uk.indeed.com", "www.indeed.co.uk", "indeed.co.uk"),
 	)
 
 	collector.OnHTML("#searchCountPages", func(element *colly.HTMLElement) {
