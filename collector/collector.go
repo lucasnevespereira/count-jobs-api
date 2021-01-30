@@ -56,6 +56,11 @@ func StartCollector(term string, location string, country string) string {
 		fmt.Println(count)
 	})
 
+	// Set error handler
+	collector.OnError(func(r *colly.Response, err error) {
+		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+	})
+
 	collector.OnRequest(func(request *colly.Request) {
 		fmt.Println("Visiting : ", request.URL.String())
 	})
