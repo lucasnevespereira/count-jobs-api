@@ -51,6 +51,9 @@ func StartCollector(term string, location string, country string) string {
 		strLen := len(str)
 		count := str[startIndex : strLen-removeIndex]
 		jobCount = strings.TrimSpace(count)
+		fmt.Println(e)
+		fmt.Println(str)
+		fmt.Println(count)
 	})
 
 	collector.OnRequest(func(request *colly.Request) {
