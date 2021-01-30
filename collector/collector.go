@@ -59,15 +59,15 @@ func StartCollector(term string, location string, country string) string {
 
 	collector.Visit(baseURL + queryURL)
 
-	// if jobCount {
+	// if jobCount == "" {
 	// 	e := models.Err{
 	// 		Message: "There is no positions for this job 🙁",
 	// 	}
 
-		err, _ := json.Marshal(e)
+	// 	err, _ := json.Marshal(e)
 
-		return string(err)
-	}
+	// 	return string(err)
+	// }
 
 	j := models.Job{
 		Tech:     term,
