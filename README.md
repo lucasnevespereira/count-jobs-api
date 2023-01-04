@@ -1,18 +1,14 @@
 # count-jobs-api
 
-Sample API based on a crawler that gets the number of jobs from indeed.
+Sample API based on a scrapper that gets the number of jobs from indeed.
 
 ## Usage
 
 ```
-git clone https://github.com/lucasnevespereira/count-jobs-api
+make serve
 ```
 
-```
-go run main.go
-```
-
-Visit [localhost:5000](http://localhost:5000)
+Visit [localhost:5001](http://localhost:5001)
 
 ## Options
 
@@ -25,14 +21,6 @@ There are currently 4 countries handled by this API:
 
 ## Example Requests
 
-Local
-
 ```
-http://localhost:5000/api?term=Javascript&location=Paris&country=fr
-```
-
-Prod
-
-```
-https://count-jobs.herokuapp.com/api?term=Javascript&location=Paris&country=fr
+http://localhost:5001/api?term=Javascript&location=Paris&country=fr
 ```

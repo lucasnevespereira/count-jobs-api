@@ -2,6 +2,7 @@ package collector
 
 import (
 	"count-jobs/models"
+	"count-jobs/utils"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -10,7 +11,8 @@ import (
 )
 
 // StartCollector collects data needed
-func StartCollector(term string, location string, country string) string {
+// TODO: refactor
+func StartCollector(term string, location string, country string) []byte {
 
 	var baseURL string
 	var removeIndex int
@@ -55,23 +57,17 @@ func StartCollector(term string, location string, country string) string {
 
 	// Set error handler
 	collector.OnError(func(r *colly.Response, err error) {
-		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+		utils.Logger.Error("collector", err)
 	})
 
 	collector.OnRequest(func(request *colly.Request) {
-		fmt.Println("Visiting : ", request.URL.String())
+		utils.Logger.Infof("Visiting %s ", request.URL.String())
 	})
 
 	collector.Visit(baseURL + queryURL)
 
 	if jobCount == "" {
-		e := models.Err{
-			Message: "There is no positions for this job 🙁",
-		}
-
-		err, _ := json.Marshal(e)
-
-		return string(err)
+		utils.Logger.Error("There is no positions for this job 🙁")
 	}
 
 	j := models.Job{
@@ -82,8 +78,8 @@ func StartCollector(term string, location string, country string) string {
 
 	job, err := json.Marshal(j)
 	if err != nil {
-		fmt.Println(err)
+		utils.Logger.Error(err)
 	}
 
-	return string(job)
+	return job
 }

@@ -1,24 +1,9 @@
 package main
 
 import (
-	"count-jobs/api"
-	"net/http"
-	"os"
+	"count-jobs/cmd"
 )
 
-func mainHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		w.Write([]byte("Hello from the Count Jobs API 👋🏼"))
-	}
-}
-
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "5000"
-	}
-	http.HandleFunc("/", mainHandler)
-	http.HandleFunc("/api", api.DataHandler)
-	http.ListenAndServe(":"+port, nil)
+	cmd.Execute()
 }
