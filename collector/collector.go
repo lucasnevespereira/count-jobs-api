@@ -1,85 +1,83 @@
 package collector
 
 import (
-	"count-jobs/models"
-	"count-jobs/utils"
-	"encoding/json"
-	"fmt"
-	"strings"
-
-	"github.com/gocolly/colly"
+	"context"
+	"github.com/pkg/errors"
+	"sync"
 )
 
-// StartCollector collects data needed
-// TODO: refactor
-func StartCollector(term string, location string, country string) []byte {
+// Source is a type that represents a job listing source.
+type Source interface {
+	Name() string
+	Collect(ctx context.Context, term string, location string, jobChan chan<- Job) error
+}
 
-	var baseURL string
-	var removeIndex int
-	var startIndex int
+// Job is a type that represents a job listing.
+type Job struct {
+	Title    string
+	Location string
+	Company  string
+	URL      string
+}
 
-	countryReceiver := strings.ToLower(country)
+// Collector is a type that represents a job listing collector.
+type Collector struct {
+	sources []Source
+}
 
-	switch countryReceiver {
-	case "fr":
-		baseURL = "https://fr.indeed.com/jobs"
-		removeIndex = len("emplois")
-		startIndex = 9
-	case "uk":
-		baseURL = "https://uk.indeed.com/jobs"
-		removeIndex = len("jobs")
-		startIndex = 9
-	case "pt":
-		baseURL = "https://pt.indeed.com/ofertas"
-		removeIndex = len("ofertas")
-		startIndex = 12
-	case "usa":
-		baseURL = "https://www.indeed.com/jobs"
-		removeIndex = len("jobs")
-		startIndex = 9
+// NewCollector creates a new job listing collector.
+func NewCollector(sources ...Source) *Collector {
+	return &Collector{
+		sources: sources,
+	}
+}
+
+// Start starts the job listing collector and returns a channel of jobs.
+func (c *Collector) Start(ctx context.Context, term string, location string) (<-chan Job, error) {
+	jobChan := make(chan Job)
+
+	var wg sync.WaitGroup
+	wg.Add(len(c.sources))
+	for _, source := range c.sources {
+		go func(s Source) {
+			err := s.Collect(ctx, term, location, jobChan)
+			if err != nil {
+				// handle error
+			}
+			wg.Done()
+		}(source)
 	}
 
-	var jobCount string
+	wg.Wait()
+	close(jobChan)
 
-	queryURL := fmt.Sprintf("?q=%v&l=%v&radius=0", term, location)
+	return jobChan, nil
+}
 
-	collector := colly.NewCollector(
-		colly.AllowedDomains("www.indeed.com", "indeed.com", "fr.indeed.com", "https://fr.indeed.com", "pt.indeed.com", "https://pt.indeed.com", "https://uk.indeed.com", "uk.indeed.com", "www.indeed.co.uk", "indeed.co.uk"),
-	)
+// SourceNotFoundError is an error that indicates that a job listing source was not found.
+type SourceNotFoundError struct {
+	name string
+}
 
-	collector.OnHTML("#searchCountPages", func(element *colly.HTMLElement) {
-		e := element.Text
-		str := strings.TrimSpace(e)
-		strLen := len(str)
-		count := str[startIndex : strLen-removeIndex]
-		jobCount = strings.TrimSpace(count)
-	})
+func (e *SourceNotFoundError) Error() string {
+	return errors.Errorf("source %q not found", e.name).Error()
+}
 
-	// Set error handler
-	collector.OnError(func(r *colly.Response, err error) {
-		utils.Logger.Error("collector", err)
-	})
-
-	collector.OnRequest(func(request *colly.Request) {
-		utils.Logger.Infof("Visiting %s ", request.URL.String())
-	})
-
-	collector.Visit(baseURL + queryURL)
-
-	if jobCount == "" {
-		utils.Logger.Error("There is no positions for this job 🙁")
+// GetSource returns a job listing source by name.
+func GetSource(name string) (Source, error) {
+	switch name {
+	case "indeed":
+		return NewIndeedSource(), nil
+	case "linkedin":
+		return NewLinkedInSource(), nil
+	default:
+		return nil, &SourceNotFoundError{name: name}
 	}
+}
 
-	j := models.Job{
-		Tech:     term,
-		Count:    jobCount,
-		Location: location,
-	}
-
-	job, err := json.Marshal(j)
-	if err != nil {
-		utils.Logger.Error(err)
-	}
-
-	return job
+var userAgents = []string{
+	"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0",
+	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/B08C390",
+	"Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko",
+	// TODO: ajouter d'autres
 }
